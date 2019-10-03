@@ -1,0 +1,73 @@
+#!/usr/bin/env python
+
+from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR
+import thread
+import sys
+
+MAX_SIZE = 8  #Maximum bits to receive
+SERVER_PORT = 8080
+
+
+def receive(conn):
+	msg = ''
+	while True:
+		packet = conn.recv(MAX_SIZE)  # recieve packet
+		msg += packet
+		if len(packet) < MAX_SIZE:  # if EOM, break
+			break
+
+	return msg
+
+def socket_bind_listen(address, port):
+	print 'Listening to {}:{}'.format(address, port)
+
+	s = socket(AF_INET, SOCK_STREAM)
+	s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+	s.bind((address, port))
+	s.listen(1)
+
+	return s
+
+def socket_connect(address, port):
+	print 'Connecting to {}:{}'.format(address, port)
+
+	s = socket(AF_INET, SOCK_STREAM)
+	s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+	s.connect((address, port))
+
+	return s
+
+
+class Proxy:
+
+	def __init__(self, listen_port, fake_ip, server_ip):
+
+		self.fake_ip = fake_ip
+		self.server_ip = server_ip
+		self.client_socket = socket_bind_listen('', listen_port)
+		print "Server ready to listen!"
+		self.send_receive(server_ip)
+
+	def send_receive(self, server_ip):
+
+		while True:
+			conn, addr = self.client_socket.accept()  # Get connection
+			server = socket_connect(server_ip, SERVER_PORT)
+
+			while True:
+				client_msg = receive(conn)
+				server.send(client_msg)
+				server_msg = receive(server)
+				conn.sendall(server_msg)
+
+			server.close()
+			conn.close()
+
+
+if __name__ == '__main__':
+
+	listen_port = int(sys.argv[1])
+	fake_ip  = sys.argv[2]
+	server_ip = sys.argv[3]
+
+	S = Proxy(listen_port=listen_port, fake_ip=fake_ip, server_ip=server_ip)
