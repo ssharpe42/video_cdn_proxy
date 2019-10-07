@@ -40,8 +40,8 @@ class Proxy:
 
 			# If server doesn't exist, disconnect from client and continue loop
 			if not server:
-				client.close()
 				print "Could not connect to server. Closing connection to client. "
+				client.close()
 
 
 			else:
@@ -69,6 +69,7 @@ class Proxy:
 				# Close connections if break out of loop
 				server.close()
 				client.close()
+
 
 
 if __name__ == '__main__':
