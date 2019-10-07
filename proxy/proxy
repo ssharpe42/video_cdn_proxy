@@ -34,7 +34,7 @@ class Proxy:
 			# Accept client connection
 			client, addr = self.client_socket.accept()
 			print 'Connected to client at:',client.getpeername()
-			client.close()
+			#client.close()
 			# Bind to fake ip and connect to server
 			server = socket_bind_connect(self.fake_ip, FAKE_PORT,self.server_ip, SERVER_PORT)
 
@@ -42,7 +42,6 @@ class Proxy:
 			if not server:
 				print "Could not connect to server. Closing connection to client. "
 				client.close()
-
 
 			else:
 				print "Connected to server at:",server.getpeername()
@@ -69,6 +68,7 @@ class Proxy:
 				# Close connections if break out of loop
 				server.close()
 				client.close()
+
 
 
 
