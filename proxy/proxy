@@ -34,7 +34,7 @@ class Proxy:
 			# Accept client connection
 			client, addr = self.client_socket.accept()
 			print 'Connected to client at:',client.getpeername()
-
+			client.close()
 			# Bind to fake ip and connect to server
 			server = socket_bind_connect(self.fake_ip, FAKE_PORT,self.server_ip, SERVER_PORT)
 
