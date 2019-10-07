@@ -40,8 +40,9 @@ class Proxy:
 
 			# If server doesn't exist, disconnect from client and continue loop
 			if not server:
-				print "Could not connect to server. Closing connection to client. "
 				client.close()
+				print "Could not connect to server. Closing connection to client. "
+
 
 			else:
 				print "Connected to server at:",server.getpeername()

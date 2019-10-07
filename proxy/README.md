@@ -1,1 +1,4 @@
-You should implement your proxy in this directory.
+Files:
+
+- socket_utils.py - helper functions
+- proxy - implements and runs proxy server

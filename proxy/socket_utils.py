@@ -25,9 +25,9 @@ def receive(con_rec, con_send, max_size):
 			break
 		if len(packet) == 0:
 			# if packet is empty, connection is disabled so close
-			print 'No data received. Closing connection.'
-			con_rec.close()
 			con_send.close()
+			con_rec.close()
+			print 'No data received. Closing connection.'
 			break
 
 	return msg
