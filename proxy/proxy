@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
 import sys
+import thread
 from socket_utils import socket_bind_listen, socket_bind_connect, receive
 
-MAX_SIZE = 8  #Maximum bits to receive
+MAX_SIZE = 1  #Maximum bits to receive
 SERVER_PORT = 8080
 FAKE_PORT = 0
+INIT_TP = 0.0   #Initial throughput value
 
 
 class Proxy:
@@ -18,6 +20,7 @@ class Proxy:
 		self.listen_port = listen_port
 		self.fake_ip = fake_ip
 		self.server_ip = server_ip
+		self.alpha = .5
 
 	def run(self):
 
@@ -34,39 +37,44 @@ class Proxy:
 			# Accept client connection
 			client, addr = self.client_socket.accept()
 			print 'Connected to client at:',client.getpeername()
-			#client.close()
-			# Bind to fake ip and connect to server
-			server = socket_bind_connect(self.fake_ip, FAKE_PORT,self.server_ip, SERVER_PORT)
 
-			# If server doesn't exist, disconnect from client and continue loop
-			if not server:
-				print "Could not connect to server. Closing connection to client. "
-				client.close()
+			print 'Staring thread...'
+			thread.start_new_thread(self.single_proxy, (client,))
 
-			else:
-				print "Connected to server at:",server.getpeername()
-				while True:
 
-					# Receive message from client
-					client_msg = receive(client, server, MAX_SIZE)
-					try:
-						# Send to server
-						server.send(client_msg)
-					except:
-						break
-					print 'Data sent client --> server:', client_msg[:-1]
+	def single_proxy(self, client):
 
-					# Receive message from server
-					server_msg = receive(server, client, MAX_SIZE)
-					try:
-						#Send to client
-						client.send(server_msg)
-					except:
-						break
-					print 'Data sent server --> client:', server_msg[:-1]
+		# Bind to fake ip and connect to server
+		server = socket_bind_connect(self.fake_ip, FAKE_PORT, self.server_ip, SERVER_PORT)
 
-				# Close connections if break out of loop
+		# If server doesn't exist, disconnect from client and continue loop
+		if not server:
+			print "Could not connect to server. Closing connection to client. "
+			client.close()
+
+		else:
+			print "Connected to server at:",server.getpeername()
+
+			client_request = receive(client, server, MAX_SIZE)
+			# Send reqest to server
+			server.send(client_request)
+			print 'Client sent request:', client_request[:-1]
+
+			while True:
+
+				# Receive message from server
+				server_msg = receive(server, client, MAX_SIZE)
+				try:
+					#Send to client
+					client.send(server_msg)
+				except:
+					break
+				print 'Data sent server --> client:', server_msg[:-1]
+
+			# Close connections if break out of loop
+			if server:
 				server.close()
+			if client:
 				client.close()
 
 
@@ -74,6 +82,8 @@ class Proxy:
 
 if __name__ == '__main__':
 
+	# log = sys.argv[1]
+	# alpha = float(sys.argv[2])
 	listen_port = int(sys.argv[1])
 	fake_ip  = sys.argv[2]
 	server_ip = sys.argv[3]

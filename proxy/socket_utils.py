@@ -1,5 +1,10 @@
 
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR
+import time
+
+def bits(s):
+
+	return len(s)*8.0
 
 
 def receive(con_rec, con_send, max_size):
@@ -14,11 +19,20 @@ def receive(con_rec, con_send, max_size):
 	"""
 
 	msg = '' # start with empty message
+
+	# If it is first packet not going to time in case we are waiting for server to send
+	first = True
+
 	while True:
 		# recieve packet
+		ts = time.time()
 		packet = con_rec.recv(max_size)
+		tf = time.time()-ts
+
 		# append packet to message
 		msg += packet
+		print(packet)
+
 		# if EOM, break
 		if '\n' in packet:
 			break
@@ -44,7 +58,7 @@ def socket_bind_listen(address, port):
 
 	try:
 		s = socket(AF_INET, SOCK_STREAM)
-		# s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+		s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 		s.bind((address, port))
 		s.listen(10)
 	except:
