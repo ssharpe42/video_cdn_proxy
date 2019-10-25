@@ -2,6 +2,7 @@
 
 import sys
 import thread
+import select
 from socket_utils import socket_bind_listen, socket_bind_connect, receive
 
 MAX_SIZE = 1  #Maximum bits to receive
@@ -62,14 +63,17 @@ class Proxy:
 
 			while True:
 
+				read_ready,_, _ =select.select([server], [], [])
 				# Receive message from server
-				server_msg = receive(server, client, MAX_SIZE)
-				try:
-					#Send to client
-					client.send(server_msg)
-				except:
-					break
-				print 'Data sent server --> client:', server_msg[:-1]
+				for rr_server in read_ready:
+
+					server_msg = receive(rr_server, client, MAX_SIZE)
+					try:
+						#Send to client
+						client.send(server_msg)
+					except:
+						break
+					print 'Data sent server --> client:', server_msg[:-1]
 
 			# Close connections if break out of loop
 			if server:
