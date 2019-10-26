@@ -59,7 +59,7 @@ class Proxy:
 			client_request = receive(client, server, MAX_SIZE)
 			# Send reqest to server
 			server.send(client_request)
-			print 'Client sent request:', client_request[:-1]
+			# print 'Client sent request:', client_request[:-1]
 
 			while True:
 
