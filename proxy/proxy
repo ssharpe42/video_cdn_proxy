@@ -3,6 +3,7 @@
 import sys
 import thread
 import select
+import re
 from socket_utils import socket_bind_listen, socket_bind_connect, receive
 
 MAX_SIZE = 4096  #Maximum bits to receive
@@ -78,10 +79,9 @@ class Proxy:
 				if client in read_ready:
 					client_msg = receive(client, server, MAX_SIZE)
 
-					if 'f4m' in client_msg:
+					if 'big_buck_bunny.f4m' in client_msg:
+						client_msg = client_msg.replace('big_buck_bunny.f4m','big_buck_bunny_nolist.f4m')
 						print client_msg
-					# if 'GET /vod' in client_msg:
-					# 	print client_msg
 
 
 					try:
