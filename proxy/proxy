@@ -80,10 +80,9 @@ class Proxy:
 
 					if 'big_buck_bunny.f4m' in client_msg:
 						print client_msg
-						raise ValueError
 					if 'GET /vod' in client_msg:
 						print client_msg
-						raise ValueError
+
 
 					try:
 						#Send to client
