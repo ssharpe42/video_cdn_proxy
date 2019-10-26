@@ -12,6 +12,7 @@ def parse_f4m(data):
 
 	return [int(b) for b in bitrates]
 
+
 def modify_uri_bitrate(request, bitrate):
 
 	return re.sub(r'[0-9]+(?=Seg[0-9]+\-Frag[0-9]+)', str(bitrate), request)

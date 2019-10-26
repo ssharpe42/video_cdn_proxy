@@ -4,7 +4,7 @@ import sys
 import thread
 import select
 from socket_utils import socket_bind_listen, socket_bind_connect, receive
-from vid_utils import parse_f4m
+from vid_utils import *
 
 MAX_SIZE = 4096  #Maximum bits to receive
 SERVER_PORT = 8080
@@ -83,14 +83,14 @@ class Proxy:
 					if 'big_buck_bunny.f4m' in client_msg:
 						client_msg = client_msg.replace('big_buck_bunny.f4m','big_buck_bunny_nolist.f4m')
 						print client_msg
-
-
+					else:
+						client_msg = modify_uri_bitrate(client_msg, 10)
 					try:
 						#Send to client
 						server.send(client_msg)
 					except:
 						break
-					#print 'Data sent client --> server:', client_msg[:100]
+					print 'Data sent client --> server:', client_msg[:100]
 
 
 			# Close connections if break out of loop
