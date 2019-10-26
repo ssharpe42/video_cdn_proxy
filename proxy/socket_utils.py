@@ -57,7 +57,7 @@ def socket_bind_listen(address, port):
 
 	try:
 		s = socket(AF_INET, SOCK_STREAM)
-		s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+		#s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 		s.bind((address, port))
 		s.listen(10)
 	except:
@@ -82,7 +82,7 @@ def socket_bind_connect(fake_addr, fake_port, server_addr, server_port):
 		# s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 		s.bind((fake_addr, fake_port))
 		s.connect((server_addr, server_port))
-		s.setblocking(0)
+		#s.setblocking(0)
 
 	except:
 		return False
