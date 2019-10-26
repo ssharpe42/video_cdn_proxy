@@ -78,10 +78,10 @@ class Proxy:
 				if client in read_ready:
 					client_msg = receive(client, server, MAX_SIZE)
 
-					if '.f4m' in client_msg:
+					if 'big_buck_bunny.f4m' in client_msg:
 						print client_msg
-					if 'GET /vod' in client_msg:
-						print client_msg
+					# if 'GET /vod' in client_msg:
+					# 	print client_msg
 
 
 					try:
