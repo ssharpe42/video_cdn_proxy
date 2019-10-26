@@ -1,3 +1,8 @@
 *.pyc
 *.python-version
 *.idea
+*.zip
+
+*client.py
+*server.py
+*.pdf

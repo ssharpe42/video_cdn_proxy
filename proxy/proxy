@@ -5,7 +5,7 @@ import thread
 import select
 from socket_utils import socket_bind_listen, socket_bind_connect, receive
 
-MAX_SIZE = 1  #Maximum bits to receive
+MAX_SIZE = 4096  #Maximum bits to receive
 SERVER_PORT = 8080
 FAKE_PORT = 0
 INIT_TP = 0.0   #Initial throughput value
@@ -63,17 +63,28 @@ class Proxy:
 
 			while True:
 
-				read_ready,_, _ =select.select([server], [], [])
+				read_ready,_, _ =select.select([server, client], [], [])
 				# Receive message from server
-				for rr_server in read_ready:
+				if server in read_ready:
 
-					server_msg = receive(rr_server, client, MAX_SIZE)
+					server_msg = receive(server, client, MAX_SIZE)
 					try:
 						#Send to client
 						client.send(server_msg)
 					except:
 						break
-					print 'Data sent server --> client:', server_msg[:-1]
+					print 'Data sent server --> client:', server_msg[:100]
+
+				if client in read_ready:
+					client_msg = receive(client, server, MAX_SIZE)
+
+					try:
+						#Send to client
+						server.send(client_msg)
+					except:
+						break
+					print 'Data sent client --> server:', client_msg[:100]
+
 
 			# Close connections if break out of loop
 			if server:
