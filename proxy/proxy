@@ -61,26 +61,37 @@ class Proxy:
 			client.close()
 
 		else:
+			n_bits = 0
+			ts = 0
+			tf = 0
 			print "Connected to server at:",server.getpeername()
-
+			after_client_req = False
 			while True:
 
 				read_ready,_, _ =select.select([server, client], [], [])
+
 				# Receive message from server
 				if server in read_ready:
 
-					ts = time.time()
 					server_msg = receive(server, client, MAX_SIZE)
-					tf = time.time()
-					print 'Kbps: {}'.format(bits(server_msg)/1000.0/(tf-ts))
+
+					n_bits+=bits(server_msg)
+
+					#print 'Kbps: {}'.format(bits(server_msg)/1000.0/(tf-ts))
 					try:
 						#Send to client
 						client.send(server_msg)
 					except:
 						break
-					#print 'Data sent server --> client:', server_msg[:100]
+
+					after_client_req = False
+				#print 'Data sent server --> client:', server_msg[:100]
 
 				if client in read_ready:
+
+					tf = time.time()
+					print 'Kbps: {}'.format(n_bits / 1000.0 / (tf - ts))
+
 					client_msg = receive(client, server, MAX_SIZE)
 
 					# Replace client request for f4m file
@@ -96,6 +107,9 @@ class Proxy:
 						break
 					print 'Data sent client --> server:', client_msg[:100]
 
+					#Start timing
+					n_bits = 0
+					ts = time.time()
 
 			# Close connections if break out of loop
 			if server:
