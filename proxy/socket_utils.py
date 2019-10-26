@@ -2,9 +2,6 @@
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR
 import time
 
-def bits(s):
-
-	return len(s)*8.0
 
 
 def receive(con_rec, con_send, max_size):
