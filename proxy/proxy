@@ -152,9 +152,9 @@ class Proxy:
 if __name__ == '__main__':
     log = sys.argv[1]
     alpha = float(sys.argv[2])
-    listen_port = int(sys.argv[1])
-    fake_ip = sys.argv[2]
-    server_ip = sys.argv[3]
+    listen_port = int(sys.argv[3])
+    fake_ip = sys.argv[4]
+    server_ip = sys.argv[5]
 
     P = Proxy(log_file=log, alpha=alpha,
               listen_port=listen_port, fake_ip=fake_ip,
