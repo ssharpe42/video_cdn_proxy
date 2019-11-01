@@ -3,7 +3,7 @@ import os
 
 def write_log(log_file, log):
 
-    if os.path.exists(log):
+    if os.path.exists(log_file):
         write = 'a'
     else:
         write = 'w'
