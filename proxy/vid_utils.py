@@ -18,7 +18,7 @@ def ewma(current, new, alpha):
 
 
 def is_vid_request(string):
-    return bool(re.match('\/vod\/[0-9]+Seg[0-9]+-Frag[0-9]+', string))
+    return bool(re.search('\/vod\/[0-9]+Seg[0-9]+-Frag[0-9]+', string))
 
 def get_chunkname(request):
     return re.search(r'\/vod\/[0-9]+Seg[0-9]+-Frag[0-9]+', request).group()

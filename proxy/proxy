@@ -136,6 +136,7 @@ class Proxy:
 
                     # Start timing since we are waiting for server
                     if is_vid_request(client_msg):
+                        print('VIDEO REQ')
                         calculate_tp = True
                         n_bits = 0
                         ts = time.time()
