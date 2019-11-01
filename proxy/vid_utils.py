@@ -6,12 +6,11 @@ def bits(s):
 
 
 def calc_tp(ts, tf, n_bits):
+    return n_bits / 1000.0 / (tf - ts)
 
-    return n_bits/1000.0/(tf-ts)
 
 def ewma(current, new, alpha):
-
-    if current<0:
+    if current < 0:
         current = new
 
     return alpha * new + current * (1 - alpha)
@@ -20,11 +19,14 @@ def ewma(current, new, alpha):
 def is_vid_request(string):
     return bool(re.search('\/vod\/[0-9]+Seg[0-9]+-Frag[0-9]+', string))
 
+
 def get_chunkname(request):
     return re.search(r'\/vod\/[0-9]+Seg[0-9]+-Frag[0-9]+', request).group()
 
+
 def get_req_bitrate(request):
     return re.search('(?<=\/vod\/)[0-9]+', request).group()
+
 
 def parse_f4m(data):
     # media = re.search('(?<=<media)((.|\n|\r)*)>', data)
@@ -32,8 +34,14 @@ def parse_f4m(data):
 
     return [int(b) for b in bitrates]
 
-def modify_uri_bitrate(request, bitrate):
-    return re.sub(r'[0-9]+(?=Seg[0-9]+\-Frag[0-9]+)', str(bitrate), request)
 
+def modify_uri_bitrate(request, available_bitrates, tp_estimate):
 
+    #Dont modify if we dont have an estimate
+    if tp_estimate <0:
+        return request
 
+    max_bitrate = max([b for b in
+                       available_bitrates if b <= tp_estimate / 1.5])
+
+    return re.sub(r'[0-9]+(?=Seg[0-9]+\-Frag[0-9]+)', str(max_bitrate), request)

@@ -26,7 +26,7 @@ class Proxy:
         self.server_ip = server_ip
         self.alpha = alpha
         self.log_file = log_file
-        self.tp_current = -1
+        self.tp_estimate = -1
 
     def read_manifest(self):
 
@@ -94,18 +94,17 @@ class Proxy:
                     if calculate_tp:
                         # Update tp estimate
                         new_tp = calc_tp(ts, tf, n_bits)
-                        self.tp_current = ewma(self.tp_current, new_tp,
-                                               self.alpha)
+                        self.tp_estimate = ewma(self.tp_estimate, new_tp,
+                                                self.alpha)
 
                         # Last chunk/requested bit rate
                         chunkname = get_chunkname(client_msg)
                         req_bitrate = get_req_bitrate(chunkname)
 
-
                         log = generate_log(ts=ts,
                                            tf=tf,
                                            tput=new_tp,
-                                           avg_tput=self.tp_current,
+                                           avg_tput=self.tp_estimate,
                                            req_bitrate=req_bitrate,
                                            server_ip=self.server_ip,
                                            chunkname=chunkname)
@@ -116,6 +115,7 @@ class Proxy:
 
                     client_msg = receive(client, server, MAX_SIZE)
 
+                    vid_req = is_vid_request(client_msg)
                     ##### Send Client Message #####
 
                     # Replace client request for f4m file
@@ -123,8 +123,10 @@ class Proxy:
                         client_msg = client_msg.replace('big_buck_bunny.f4m',
                                                         'big_buck_bunny_nolist.f4m')
                         print client_msg
-                    else:
-                        client_msg = modify_uri_bitrate(client_msg, 10)
+                    elif vid_req:
+                        client_msg = modify_uri_bitrate(client_msg,
+                                                        self.bitrates,
+                                                        self.tp_estimate)
                     try:
                         # Send to server
                         server.send(client_msg)
@@ -135,7 +137,7 @@ class Proxy:
                     ##### Start Calculating Throughput #####
 
                     # Start timing since we are waiting for server
-                    if is_vid_request(client_msg):
+                    if vid_req:
                         print('VIDEO REQ')
                         calculate_tp = True
                         n_bits = 0

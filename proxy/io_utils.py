@@ -15,13 +15,13 @@ def write_log(log_file, log):
 
 def generate_log(ts, tf, tput, avg_tput, req_bitrate, server_ip, chunkname):
 
-    current_time = time.time()
+    current_time = round(time.time())
     duration = tf-ts
 
     log = [current_time
            , duration
-           , tput
-           , avg_tput
+           , int(tput)
+           , int(avg_tput)
            , req_bitrate
            , server_ip
            , chunkname
