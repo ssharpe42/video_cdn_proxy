@@ -1,9 +1,16 @@
 import time
+import os
 
 def write_log(log_file, log):
 
-    with open(log_file) as f:
-        f.write(' '.join([str(m) for m in log]))
+    if os.path.exists(log):
+        write = 'a'
+    else:
+        write = 'w'
+
+    with open(log_file, write) as f:
+        f.write(' '.join([str(m) for m in log])+'\n')
+        f.close()
 
 
 def generate_log(ts, tf, tput, avg_tput, req_bitrate, server_ip, chunkname):
