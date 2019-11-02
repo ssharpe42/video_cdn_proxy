@@ -26,9 +26,10 @@ class Proxy:
         self.server_ip = server_ip
         self.alpha = alpha
         self.log_file = log_file
-        self.tp_estimate = -1
 
         self.read_manifest()
+
+        self.tp_estimate = min(self.bitrates)
 
     def read_manifest(self):
 
@@ -73,11 +74,12 @@ class Proxy:
 
             while True:
 
+                print('AT READ')
                 read_ready, _, _ = select.select([server, client], [], [])
 
                 # Receive message from server
                 if server in read_ready:
-
+                    print('READING SERVER')
                     server_msg = receive(server, client, MAX_SIZE)
 
                     if calculate_tp:
@@ -91,7 +93,7 @@ class Proxy:
                         break
 
                 if client in read_ready:
-
+                    print('READING CLIENT')
                     # If we were calculating throughput, log info
                     if calculate_tp:
                         # Update tp estimate

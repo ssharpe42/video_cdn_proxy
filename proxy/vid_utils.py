@@ -10,8 +10,6 @@ def calc_tp(ts, tf, n_bits):
 
 
 def ewma(current, new, alpha):
-    if current < 0:
-        current = new
 
     return alpha * new + current * (1 - alpha)
 
@@ -36,10 +34,6 @@ def parse_f4m(data):
 
 
 def modify_uri_bitrate(request, available_bitrates, tp_estimate):
-
-    #Dont modify if we dont have an estimate
-    if tp_estimate <0:
-        return request
 
     max_bitrate = max([b for b in
                        available_bitrates if b <= tp_estimate / 1.5])
