@@ -79,7 +79,7 @@ class Proxy:
 
                 # Receive message from server
                 if server in read_ready:
-                    print('READING SERVER')
+                    #print('READING SERVER')
                     server_msg = receive(server, client, MAX_SIZE)
 
                     if calculate_tp:
@@ -93,7 +93,7 @@ class Proxy:
                         break
 
                 if client in read_ready:
-                    print('READING CLIENT')
+                    #print('READING CLIENT')
                     # If we were calculating throughput, log info
                     if calculate_tp:
                         # Update tp estimate
@@ -142,7 +142,7 @@ class Proxy:
 
                     # Start timing since we are waiting for server
                     if vid_req:
-                        print('VIDEO REQ')
+                        #print('VIDEO REQ')
                         calculate_tp = True
                         n_bits = 0
                         ts = time.time()
