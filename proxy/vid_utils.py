@@ -35,7 +35,13 @@ def parse_f4m(data):
 
 def modify_uri_bitrate(request, available_bitrates, tp_estimate):
 
-    max_bitrate = max([b for b in
-                       available_bitrates if b <= tp_estimate / 1.5])
+    allowed_bitrates = [b for b in
+                       available_bitrates if b <= tp_estimate / 1.5]
+
+    if len(allowed_bitrates)==0:
+        max_bitrate  = 10
+    else:
+        max_bitrate = max([b for b in
+                           available_bitrates if b <= tp_estimate / 1.5])
 
     return re.sub(r'[0-9]+(?=Seg[0-9]+\-Frag[0-9]+)', str(max_bitrate), request)
