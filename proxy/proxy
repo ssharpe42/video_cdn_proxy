@@ -75,7 +75,7 @@ class Proxy:
             while True:
 
                 #print('AT READ')
-                read_ready, _, _ = select.select([server, client], [], [])
+                read_ready, _, _ = select.select([client, server], [], [])
 
                 # Receive message from server
                 if server in read_ready:
@@ -120,6 +120,7 @@ class Proxy:
                     client_msg = receive(client, server, MAX_SIZE)
 
                     vid_req = is_vid_request(client_msg)
+
                     ##### Send Client Message #####
 
                     # Replace client request for f4m file
