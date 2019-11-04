@@ -36,6 +36,14 @@ parse_f4m - Parse the f4m file for available bitrates
 modify_uri_bitrate - Modify the requested bitrate
     
 
+
+io_utils.py
+-------------
+
+write_log - Write or append to log file
+
+generate_log - Generate lines for log file
+
 proxy
 ------
 Proxy - proxy class that implements a proxy server

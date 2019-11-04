@@ -81,7 +81,8 @@ class Proxy:
                 if server in read_ready:
                     #print('READING SERVER')
                     server_msg = receive(server, client, MAX_SIZE)
-
+                    print('Content Length: {}'.format("Content Length" in server_msg))
+                    print(server_msg[0:100])
                     if calculate_tp:
                         n_bits += bits(server_msg)
                         tf = time.time()
