@@ -7,7 +7,7 @@ def bits(s):
 
 def get_length(string):
 
-    re.search('(?<=Content-Length:?\s)[0-9]+', string).group()
+    return float(re.search('(?<=Content-Length\:\s)[0-9]+', string).group())*8
 
 
 def calc_tp(ts, tf, n_bits):
