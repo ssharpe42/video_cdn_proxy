@@ -5,6 +5,10 @@ def bits(s):
     """Calculate bits in message"""
     return len(s) * 8.0
 
+def get_length(string):
+
+    re.search('(?<=Content-Length:?\s)[0-9]+', string).group()
+
 
 def calc_tp(ts, tf, n_bits):
     """
