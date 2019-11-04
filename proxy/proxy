@@ -82,8 +82,8 @@ class Proxy:
                     #print('READING SERVER')
                     server_msg = receive(server, client, MAX_SIZE)
 
-                    print('Bits: {}'.format(bits(server_msg)))
-                    print('Length: {}'.format(get_length(server_msg)))
+                    # print('Bits: {}'.format(bits(server_msg)))
+                    # print('Length: {}'.format(get_length(server_msg)))
 
                     if calculate_tp:
                         n_bits += bits(server_msg)
@@ -140,7 +140,7 @@ class Proxy:
                         server.send(client_msg)
                     except:
                         break
-                    #print 'Data sent client --> server:', client_msg[:100]
+                    print 'Data sent client --> server:', client_msg[:100]
 
                     ##### Start Calculating Throughput #####
 
