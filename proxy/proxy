@@ -136,7 +136,7 @@ class Proxy:
                         server.send(client_msg)
                     except:
                         break
-                    print 'Data sent client --> server:', client_msg[:100]
+                    #print 'Data sent client --> server:', client_msg[:100]
 
                     ##### Start Calculating Throughput #####
 
