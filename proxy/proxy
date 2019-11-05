@@ -76,7 +76,6 @@ class Proxy:
             while True:
 
                 print('CLIENT SELECT')
-                print(select.select([client,server],[],[]))
                 client_ready, _, _ = select.select([client], [], [])
 
                 if client in client_ready:
@@ -155,7 +154,7 @@ class Proxy:
                     try:
                         # Send to client
                         client.send(server_msg)
-                        #print 'Data sent server --> client:', server_msg
+                        print 'Data sent server --> client:', server_msg
                     except:
                         break
 

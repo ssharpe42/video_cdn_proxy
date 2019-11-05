@@ -18,20 +18,16 @@ def receive(con_rec, con_send, max_size):
 	msg = '' # start with empty message
 	#print 'recv from {}'.format(con_rec.getpeername())
 	# If it is first packet not going to time in case we are waiting for server to send
-	first = True
 
 	while True:
 		# recieve packet
-		ts = time.time()
 		packet = con_rec.recv(max_size)
-		tf = time.time()-ts
-
 		# append packet to message
 		msg += packet
 
 		# if EOM, break
-		if '\n' in packet:
-			break
+		# if '\n' in packet:
+		# 	break
 		if len(packet) == 0:
 			# if packet is empty, connection is disabled so close
 			con_rec.close()
