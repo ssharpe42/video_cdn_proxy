@@ -68,35 +68,15 @@ class Proxy:
         else:
 
             print "Connected to server at:", server.getpeername()
-            server.setblocking(0)
-            client.setblocking(0)
+            # server.setblocking(0)
+            # client.setblocking(0)
             # Dont calculate throughput until streaming movie
             calculate_tp = False
 
             while True:
 
-                print('SERVER SELECT')
-                server_ready, _, _ = select.select([server], [], [])
-                # Receive message from server
-                if server in server_ready:
-                    print('READING SERVER')
-                    #print('READING SERVER')
-                    server_msg = receive(server, client, MAX_SIZE)
-                    print('DONE RECEIVING SERVER')
-                    # print('Bits: {}'.format(bits(server_msg)))
-                    # print('Length: {}'.format(get_length(server_msg)))
-
-                    if calculate_tp:
-                        n_bits += bits(server_msg)
-                        tf = time.time()
-
-                    try:
-                        # Send to client
-                        client.send(server_msg)
-                        print 'Data sent server --> client:', server_msg
-                    except:
-                        break
                 print('CLIENT SELECT')
+                print(select.select([client,server]))
                 client_ready, _, _ = select.select([client], [], [])
 
                 if client in client_ready:
@@ -150,12 +130,35 @@ class Proxy:
 
                     # Start timing since we are waiting for server
                     if vid_req:
-                        # print('VIDEO REQ')
+                        #print('VIDEO REQ')
                         calculate_tp = True
                         n_bits = 0
                         ts = time.time()
                     else:
                         calculate_tp = False
+
+                print('SERVER SELECT')
+                server_ready, _, _ = select.select([server], [], [])
+                # Receive message from server
+                if server in server_ready:
+                    print('READING SERVER')
+                    #print('READING SERVER')
+                    server_msg = receive(server, client, MAX_SIZE)
+                    print('DONE RECEIVING SERVER')
+                    # print('Bits: {}'.format(bits(server_msg)))
+                    # print('Length: {}'.format(get_length(server_msg)))
+
+                    if calculate_tp:
+                        n_bits += bits(server_msg)
+                        tf = time.time()
+
+                    try:
+                        # Send to client
+                        client.send(server_msg)
+                        #print 'Data sent server --> client:', server_msg
+                    except:
+                        break
+
             # Close connections if break out of loop
             if server:
                 server.close()
