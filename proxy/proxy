@@ -8,7 +8,7 @@ from io_utils import *
 from socket_utils import socket_bind_listen, socket_bind_connect, receive
 from vid_utils import *
 
-MAX_SIZE = 16384  # Maximum bits to receive
+MAX_SIZE = 400#16384  # Maximum bits to receive
 SERVER_PORT = 8080
 FAKE_PORT = 0
 INIT_TP = 0.0  # Initial throughput value
