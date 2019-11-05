@@ -50,7 +50,6 @@ class Proxy:
             # Accept client connection
             client, addr = self.client_socket.accept()
             print 'Connected to client at:', client.getpeername()
-            client.setblocking(0)
 
             print 'Staring thread...'
             thread.start_new_thread(self.single_proxy, (client,))
@@ -69,7 +68,8 @@ class Proxy:
         else:
 
             print "Connected to server at:", server.getpeername()
-
+            server.setblocking(0)
+            client.setblocking(0)
             # Dont calculate throughput until streaming movie
             calculate_tp = False
 
