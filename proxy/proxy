@@ -75,27 +75,9 @@ class Proxy:
             while True:
 
                 #print('AT READ')
-                read_ready, _, _ = select.select([client, server], [], [])
+                client_ready, _, _ = select.select([client], [], [])
 
-                # Receive message from server
-                if server in read_ready:
-                    #print('READING SERVER')
-                    server_msg = receive(server, client, MAX_SIZE)
-
-                    # print('Bits: {}'.format(bits(server_msg)))
-                    # print('Length: {}'.format(get_length(server_msg)))
-
-                    if calculate_tp:
-                        n_bits += bits(server_msg)
-                        tf = time.time()
-
-                    try:
-                        # Send to client
-                        client.send(server_msg)
-                    except:
-                        break
-
-                if client in read_ready:
+                if client in client_ready:
                     #print('READING CLIENT')
                     # If we were calculating throughput, log info
                     if calculate_tp:
@@ -152,6 +134,26 @@ class Proxy:
                         ts = time.time()
                     else:
                         calculate_tp = False
+
+                server_ready, _, _ = select.select([server], [], [])
+                # Receive message from server
+                if server in server_ready:
+                    #print('READING SERVER')
+                    server_msg = receive(server, client, MAX_SIZE)
+
+                    # print('Bits: {}'.format(bits(server_msg)))
+                    # print('Length: {}'.format(get_length(server_msg)))
+
+                    if calculate_tp:
+                        n_bits += bits(server_msg)
+                        tf = time.time()
+
+                    try:
+                        # Send to client
+                        client.send(server_msg)
+                        print 'Data sent server --> client:', server_msg[:100]
+                    except:
+                        break
 
             # Close connections if break out of loop
             if server:
