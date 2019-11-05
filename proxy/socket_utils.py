@@ -26,8 +26,8 @@ def receive(con_rec, con_send, max_size):
 		msg += packet
 
 		# if EOM, break
-		# if '\n' in packet:
-		# 	break
+		if '\n' in packet:
+			break
 		if len(packet) == 0:
 			# if packet is empty, connection is disabled so close
 			con_rec.close()
