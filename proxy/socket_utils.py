@@ -57,6 +57,7 @@ def socket_bind_listen(address, port):
 		s.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 		s.bind((address, port))
 		s.listen(10)
+		s.setblocking(0)
 	except:
 		return False
 
