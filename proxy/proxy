@@ -50,6 +50,7 @@ class Proxy:
             # Accept client connection
             client, addr = self.client_socket.accept()
             print 'Connected to client at:', client.getpeername()
+            client.setblocking(0)
 
             print 'Staring thread...'
             thread.start_new_thread(self.single_proxy, (client,))
