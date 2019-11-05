@@ -24,7 +24,6 @@ def receive(con_rec, con_send, max_size):
 		packet = con_rec.recv(max_size)
 		# append packet to message
 		msg += packet
-		print(packet)
 		# if EOM, break
 		if '\n' in packet:
 			break
