@@ -23,10 +23,8 @@ def receive(con_rec, con_send, max_size):
 		packet = con_rec.recv(max_size)
 		# append packet to message
 		msg += packet
-		# if EOM, break
-		if packet=='\n':
-			break
-		if len(packet) == 0:
+
+		if len(packet) < max_size:
 			# if packet is empty, connection is disabled so close
 			con_rec.close()
 			con_send.close()
