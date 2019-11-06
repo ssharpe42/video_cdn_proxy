@@ -129,7 +129,6 @@ class Proxy:
 
                     # Start timing since we are waiting for server
                     if vid_req:
-                        raise ValueError
                         #print('VIDEO REQ')
                         calculate_tp = True
                         n_bits = 0
@@ -152,7 +151,8 @@ class Proxy:
                     try:
                         # Send to client
                         client.send(server_msg)
-                        print 'Data sent server --> client:', server_msg
+                        if not vid_req:
+                            print 'Data sent server --> client:', server_msg
                     except:
                         break
 
