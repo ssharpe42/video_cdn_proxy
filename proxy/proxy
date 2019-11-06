@@ -5,15 +5,15 @@ import sys
 import thread
 
 from io_utils import *
-from socket_utils import socket_bind_listen, socket_bind_connect, receive, server_receive
+from socket_utils import socket_bind_listen, socket_bind_connect, receive
 from vid_utils import *
 
-MAX_SIZE = 4096  # Maximum bits to receive
+
 SERVER_PORT = 8080
 FAKE_PORT = 0
-INIT_TP = 0.0  # Initial throughput value
+#INIT_TP = 0.0  # Initial throughput value
 MANIFEST_FILE = '/var/www/vod/big_buck_bunny.f4m'
-
+MAX_SIZE = 32768
 
 class Proxy:
     """Proxy Class"""
@@ -142,20 +142,19 @@ class Proxy:
                 # Receive message from server
                 if server in read_ready:
                     # print('READING SERVER')
-                    msg_bits = server_receive(server, client, MAX_SIZE)
+                    server_msg = receive(server, client, MAX_SIZE)
                     # print('DONE RECEIVING SERVER')
 
                     if calculate_tp:
-                        #n_bits += bits(server_msg)
-                        n_bits += msg_bits
+                        n_bits += bits(server_msg)
                         tf = time.time()
 
-                    # try:
-                    #     # Send to client
-                    #     client.send(server_msg)
-                    #     #print 'Data sent server --> client:', server_msg[0:400]
-                    # except:
-                    #     break
+                    try:
+                        # Send to client
+                        client.send(server_msg)
+                        #print 'Data sent server --> client:', server_msg[0:400]
+                    except:
+                        break
 
             # Close connections if break out of loop
             if server:
