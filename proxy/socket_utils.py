@@ -52,16 +52,16 @@ def receive(con_rec, con_send, max_size):
 	msg = '' # start with empty message
 	#print 'recv from {}'.format(con_rec.getpeername())
 	# If it is first packet not going to time in case we are waiting for server to send
-	packet = con_rec.recv(max_size)
 
-	while len(packet):
-
+	while True:
+		print('still receiving')
+		packet = con_rec.recv(max_size)
 		# append packet to message
-		msg += packet
+		if not packet:
+			break
+
 		print(packet)
 		# recieve packet
-		packet = con_rec.recv(max_size)
-		print('still receiving')
 
 	return msg
 
