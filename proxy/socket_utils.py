@@ -24,13 +24,14 @@ def receive(con_rec, con_send, max_size):
 		# append packet to message
 		msg += packet
 
-		if len(packet) < max_size:
-			# if packet is empty, connection is disabled so close
-			break
 		if len(packet) == 0:
+			# if packet is empty, connection is disabled so close
 			con_rec.close()
 			con_send.close()
 			print 'No data received. Closing connection.'
+			break
+
+		if len(packet) < max_size:
 			break
 
 	return msg
