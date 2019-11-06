@@ -13,7 +13,7 @@ SERVER_PORT = 8080
 FAKE_PORT = 0
 #INIT_TP = 0.0  # Initial throughput value
 MANIFEST_FILE = '/var/www/vod/big_buck_bunny.f4m'
-MAX_SIZE = 10#32768
+MAX_SIZE = 32768
 
 class Proxy:
     """Proxy Class"""
@@ -76,8 +76,7 @@ class Proxy:
 
                 print('SELECT')
                 #read_ready, _, _ = select.select([client, server], [], [])
-                time.sleep(0.001)
-                client_ready, _, _ = select.select([client, server], [], [])
+                client_ready, _, _ = select.select([client], [], [])
 
                 if client in client_ready:
                     print('READING CLIENT')
