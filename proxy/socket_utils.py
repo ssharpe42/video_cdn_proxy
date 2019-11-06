@@ -24,7 +24,7 @@ def receive(con_rec, con_send, max_size):
 		# append packet to message
 		msg += packet
 		# if EOM, break
-		if '\n' in packet:
+		if packet=='\n':
 			break
 		if len(packet) == 0:
 			# if packet is empty, connection is disabled so close
