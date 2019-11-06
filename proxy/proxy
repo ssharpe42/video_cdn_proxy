@@ -75,10 +75,10 @@ class Proxy:
             while True:
 
 
-                #read_ready, _, _ = select.select([client, server], [], [])
-                client_ready, _, _ = select.select([client], [], [])
+                read_ready, _, _ = select.select([client, server], [], [])
+                #client_ready, _, _ = select.select([client], [], [])
 
-                if client in client_ready:
+                if client in read_ready:
 
                     # If we were calculating throughput, log info
                     if calculate_tp:
@@ -137,9 +137,9 @@ class Proxy:
                         calculate_tp = False
 
                 #print('SERVER SELECT')
-                server_ready, _, _ = select.select([server], [], [])
+                #server_ready, _, _ = select.select([server], [], [])
                 # Receive message from server
-                if server in server_ready:
+                if server in read_ready:
                     server_msg = receive(server, client, MAX_SIZE)
 
                     if calculate_tp:
