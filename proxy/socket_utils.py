@@ -61,7 +61,7 @@ def receive(con_rec, con_send, max_size):
 		print(packet)
 		# recieve packet
 		packet = con_rec.recv(max_size)
-
+		print('still receiving')
 
 	return msg
 
