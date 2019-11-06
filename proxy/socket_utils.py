@@ -1,6 +1,7 @@
 
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR
 import time
+from vid_utils import bits
 
 
 
@@ -35,6 +36,36 @@ def receive(con_rec, con_send, max_size):
 			break
 
 	return msg
+
+
+def server_receive(con_rec, con_send, max_size):
+
+	"""
+	Receive messages from connections
+
+	:param con_rec: connection to receive from
+	:param con_send: connection for sending (doesn't send just closes if needed)
+	:param max_size: max number of bits to send
+	:return:
+	"""
+	n_bits = 0
+	while True:
+		# recieve packet
+		packet = con_rec.recv(max_size)
+		n_bits+=bits(packet)
+		# if EOM, break
+		if '\n' in packet:
+			break
+		if len(packet) == 0:
+			# if packet is empty, connection is disabled so close
+			con_rec.close()
+			con_send.close()
+			print 'No data received. Closing connection.'
+			break
+
+		con_send.send(packet)
+
+	return bits
 
 
 

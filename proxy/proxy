@@ -5,10 +5,10 @@ import sys
 import thread
 
 from io_utils import *
-from socket_utils import socket_bind_listen, socket_bind_connect, receive
+from socket_utils import socket_bind_listen, socket_bind_connect, receive, server_receive
 from vid_utils import *
 
-MAX_SIZE = 512000  # Maximum bits to receive
+MAX_SIZE = 4096  # Maximum bits to receive
 SERVER_PORT = 8080
 FAKE_PORT = 0
 INIT_TP = 0.0  # Initial throughput value
@@ -77,9 +77,9 @@ class Proxy:
                 # print('CLIENT SELECT')
                 #read_ready, _, _ = select.select([client, server], [], [])
 
-                client_ready, _, _ = select.select([client], [], [])
+                read_ready, _, _ = select.select([client, server], [], [])
 
-                if client in client_ready:
+                if client in read_ready:
                     # print('READING CLIENT')
                     # If we were calculating throughput, log info
                     if calculate_tp:
@@ -138,23 +138,24 @@ class Proxy:
                         calculate_tp = False
 
                 #print('SERVER SELECT')
-                server_ready, _, _ = select.select([server], [], [])
+                #server_ready, _, _ = select.select([server], [], [])
                 # Receive message from server
-                if server in server_ready:
+                if server in read_ready:
                     # print('READING SERVER')
-                    server_msg = receive(server, client, MAX_SIZE)
+                    msg_bits = server_receive(server, client, MAX_SIZE)
                     # print('DONE RECEIVING SERVER')
 
                     if calculate_tp:
-                        n_bits += bits(server_msg)
+                        #n_bits += bits(server_msg)
+                        n_bits += msg_bits
                         tf = time.time()
 
-                    try:
-                        # Send to client
-                        client.send(server_msg)
-                        #print 'Data sent server --> client:', server_msg[0:400]
-                    except:
-                        break
+                    # try:
+                    #     # Send to client
+                    #     client.send(server_msg)
+                    #     #print 'Data sent server --> client:', server_msg[0:400]
+                    # except:
+                    #     break
 
             # Close connections if break out of loop
             if server:
