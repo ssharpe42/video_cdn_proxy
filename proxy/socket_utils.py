@@ -48,7 +48,7 @@ def receive(con_rec, con_send, max_size):
 	:param max_size: max number of bits to send
 	:return:
 	"""
-
+	con_rec.setblocking(0)
 	msg = '' # start with empty message
 	#print 'recv from {}'.format(con_rec.getpeername())
 	# If it is first packet not going to time in case we are waiting for server to send
