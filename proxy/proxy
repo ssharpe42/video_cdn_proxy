@@ -152,7 +152,7 @@ class Proxy:
                         # Send to client
                         client.send(server_msg)
                         if not vid_req:
-                            print 'Data sent server --> client:', server_msg
+                            print 'Data sent server --> client:', server_msg[0:16000]
                     except:
                         break
 
