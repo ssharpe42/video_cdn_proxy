@@ -80,7 +80,7 @@ class Proxy:
                 read_ready, _, _ = select.select([client, server], [], [])
 
                 if client in read_ready:
-                    # print('READING CLIENT')
+                    print('READING CLIENT')
                     # If we were calculating throughput, log info
                     if calculate_tp:
                         # Update tp estimate
@@ -144,9 +144,9 @@ class Proxy:
                 #server_ready, _, _ = select.select([server], [], [])
                 # Receive message from server
                 if server in read_ready:
-                    # print('READING SERVER')
+                    print('READING SERVER')
                     server_msg = receive(server, client, MAX_SIZE)
-                    # print('DONE RECEIVING SERVER')
+                    print('DONE RECEIVING SERVER')
 
                     if calculate_tp:
                         n_bits += bits(server_msg)
