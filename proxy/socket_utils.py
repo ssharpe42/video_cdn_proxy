@@ -58,7 +58,7 @@ def receive(con_rec, con_send, max_size):
 
 		# append packet to message
 		msg += packet
-
+		print(packet)
 		# recieve packet
 		packet = con_rec.recv(max_size)
 
