@@ -75,9 +75,11 @@ class Proxy:
             while True:
 
                 # print('CLIENT SELECT')
-                read_ready, _, _ = select.select([client, server], [], [])
+                #read_ready, _, _ = select.select([client, server], [], [])
 
-                if client in read_ready:
+                client_ready, _, _ = select.select([client], [], [])
+
+                if client in client_ready:
                     # print('READING CLIENT')
                     # If we were calculating throughput, log info
                     if calculate_tp:
@@ -99,8 +101,7 @@ class Proxy:
                                            chunkname=chunkname)
 
                         write_log(self.log_file, log)
-                        print(n_bits)
-                        print(n_length)
+
                         print log
 
                     client_msg = receive(client, server, MAX_SIZE)
@@ -132,24 +133,19 @@ class Proxy:
                         #print('VIDEO REQ')
                         calculate_tp = True
                         n_bits = 0
-                        n_length = 0
                         ts = time.time()
                     else:
                         calculate_tp = False
 
                 #print('SERVER SELECT')
-                #server_ready, _, _ = select.select([server], [], [])
+                server_ready, _, _ = select.select([server], [], [])
                 # Receive message from server
-                if server in read_ready:
+                if server in server_ready:
                     # print('READING SERVER')
                     server_msg = receive(server, client, MAX_SIZE)
                     # print('DONE RECEIVING SERVER')
 
-                    # print('Bits: {}'.format(bits(server_msg)))
-                    # print('Length: {}'.format(get_length(server_msg)))
-
                     if calculate_tp:
-                        n_length += get_length(server_msg)
                         n_bits += bits(server_msg)
                         tf = time.time()
 
