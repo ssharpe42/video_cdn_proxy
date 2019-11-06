@@ -13,7 +13,7 @@ SERVER_PORT = 8080
 FAKE_PORT = 0
 #INIT_TP = 0.0  # Initial throughput value
 MANIFEST_FILE = '/var/www/vod/big_buck_bunny.f4m'
-MAX_SIZE = 32768
+MAX_SIZE = 5000 #32768
 
 class Proxy:
     """Proxy Class"""
@@ -151,8 +151,7 @@ class Proxy:
                     try:
                         # Send to client
                         client.send(server_msg)
-                        if not vid_req:
-                            print 'Data sent server --> client:', server_msg[0:16000]
+                        print 'Data sent server --> client:', server_msg[0:16000]
                     except:
                         break
 
