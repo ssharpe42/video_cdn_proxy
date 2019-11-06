@@ -129,6 +129,7 @@ class Proxy:
 
                     # Start timing since we are waiting for server
                     if vid_req:
+                        raise ValueError
                         #print('VIDEO REQ')
                         calculate_tp = True
                         n_bits = 0
