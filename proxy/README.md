@@ -1,13 +1,8 @@
-Notes:
-
-Currently browser needs to be refreshed 3 times to start streaming. It doesn't
-seem to request after receiving objects. 
-
-
 Files:
 
 socket_utils.py
 ---------------
+These functions deal with binding and connecting sockets and receiving data. 
 
 receive - Receive messages from connections
 
@@ -18,6 +13,7 @@ socket_bind_connect -  bind to a fake address and port and connect to server
 
 vid_utils.py
 -------------
+These functions perform calculations that relate to video streaming.
 
 bits - Calculate bits in message
 
@@ -39,6 +35,7 @@ modify_uri_bitrate - Modify the requested bitrate
 
 io_utils.py
 -------------
+These functions aggregate and write log files. 
 
 write_log - Write or append to log file
 
